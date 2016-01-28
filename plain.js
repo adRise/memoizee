@@ -31,5 +31,13 @@ module.exports = function self(fn/*, options */) {
 	if (self.__profiler__) self.__profiler__(conf);
 
 	conf.updateEnv();
-	return conf.memoized;
+
+  // expose conf to the user application so that on('event') could be
+  // called externally
+  var memoized = conf.memoized;
+  Object.defineProperty(memoized, 'config', {
+    value: conf,
+    __proto__: null
+  });
+  return memoized;
 };
