@@ -83,11 +83,11 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 			}
 			args = aFrom(arguments);
 			if (conf.has(id)) {
-				if (err) {
-					conf.delete(id);
-				} else {
+				if (typeof err === 'boolean' && err) {
 					cache[id] = { context: this, args: args };
 					conf.emit('setasync', id, (typeof cb === 'function') ? 1 : cb.length);
+				} else {
+					conf.delete(id);
 				}
 			}
 			if (typeof cb === 'function') {
